@@ -18,19 +18,15 @@ layout: default
 
 </body>
 
-
-  <body>
-    <h1>Implementation Overview</h1>
-
-    <section>
-        <h2>Implementation</h2>
-        <p>
-Utilizing the &lt;strong&gt;CRAM&lt;/strong&gt;, written in Lisp, provides significant benefits for robot programming. The framework is designed to adapt the robot&#x27;s actions based on specific task requirements and real-time sensor data.
-</p>
-        <h3>Code Snippet</h3>
-        
-<pre><code>
-(perform 
+<body>
+    <h1>Implementation Details</h1>
+    <h2>CRAM Framework</h2>
+    <p>Utilizing the <strong>CRAM</strong>, written in Lisp, provides significant benefits for robot programming. The framework is designed to adapt the robot's actions based on specific task requirements and real-time sensor data.</p>
+    <p>A notable advantage of using CRAM is its capacity to manage underdefined actions, allowing the robot to adjust variables or parameters during task execution dynamically.</p>
+    <h3>Mix Action Designator</h3>
+    <p>Central to the CRAM architecture for mixing tasks is the <strong>mix action designator</strong> component.</p>
+    <h4>Code Snippet: Mixing Action Designator</h4>
+    <pre><code>(perform 
    (an action
          (type mixing)
          (context :mix-circle) 
@@ -40,16 +36,47 @@ Utilizing the &lt;strong&gt;CRAM&lt;/strong&gt;, written in Lisp, provides signi
          (object ?object-container)
          (grasp :top)
          (source ?object-desig-source))
-)
+)</code></pre>
+    <p>In summary, the code snippet directs the robot to carry out a mixing action in a circular pattern.</p>
+    <h2>Calculation of Trajectories in Cartesian Space</h2>
+    <ul>
+        <li>Container-based coordinate system</li>
+        <li>Gripper-based coordinate system</li>
+        <li>Robot base coordinate system</li>
+    </ul>
+    <h3>Pose Transformation</h3>
+    <p>The initial poses are calculated in the container-based frame.</p>
+    <p>Mathematically represented as: \( 	ext{Modified Pose} = 	ext{Initial Pose} + 	ext{Tool Dimensions} \)</p>
+    <h3>Approach Poses</h3>
+    <p>The objective is to map a trajectory from the current gripper pose to the container's center.</p>
+    <p>Mathematically represented as: \( 	ext{End Pose} = f(h_{\text{container}}, h_{\text{tool}}) \)</p>
+    <h3>Start-Mix Poses</h3>
+    <p>The Start-mix-poses serve as a sequence of poses that facilitate a smooth transition from the initial approach-pose to the actual mix-pose.</p>
+    <p>Mathematically represented as: \( x(t) = a \cdot e^{k \cdot t} \cos(t), \quad y(t) = a \cdot e^{k \cdot t} \sin(t) \)</p>
+    <h3>Mix Poses</h3>
+    <p>By default, the parameter ResolutionIndex (abbreviated as reso) is initialized to twelve sample points.</p>
+    <p>Mathematically represented as: \( x(t) = \textbf{EllipseFactor} \times \textbf{Radius} \times \cos(t), y(t) = \textbf{Radius} \times \sin(t) \)</p>
+    <h3>Orbit Path</h3>
+    <pre><code>
+[...]
+(loop while (<= x CycleCount)
+ do (setf x   (+ x  1))
+ [...]
+  (change-v pose 
+        :x-offset 
+            (* erate (* (/ containerrim 2) 
+                      (cos (* x angle))))
+        :y-offset 
+            (* (/ containerrim 2) 
+             (sin (* x angle))))
+))
 </code></pre>
-
-        <h3>Summary</h3>
-        <p>
-In summary, the code snippet directs the robot to carry out a mixing action in a circular pattern. The action is set to have a resolution of 12 and will complete one full circle.
-</p>
-        <h3>Related Images</h3>
-        <img src="IMG_1148.png" alt="IMG_1148"><br><br><img src="uncommonShapes_row.png" alt="uncommonShapes_row"><br><br><img src="IMG_0621.png" alt="IMG_0621"><br><br><img src="Timeline.png" alt="Timeline"><br><br><img src="Lade-whisk.jpeg" alt="Lade-whisk"><br><br><img src="Allmixig.jpeg" alt="Allmixig"><br><br><img src="Timeline-mixng.png" alt="Timeline-mixng"><br><br><img src="Reso-rate.png" alt="Reso-rate"><br><br><img src="Circle-mix.png" alt="Circle-mix"><br><br><img src="Orbital-mix.png" alt="Orbital-mix"><br><br>
-    </section>
+    <h3>Orbital Motion</h3>
+    <p>The orbital motion is a composition of two circular motions.</p>
+    <h3>End Pose and Retract Pose</h3>
+    <p>The end-pose follows the reverse order of the start-mix-poses. The retract pose is calculated by adding a lift offset to the end pose.</p>
+    <h3>Atomic Poses</h3>
+    <p>With the above calculations, the atomic poses for the entire process are established.</p>
 </body>
 </html>
 
