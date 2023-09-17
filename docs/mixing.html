@@ -35,11 +35,11 @@ layout: default
          (arm (:right))
          (object ?object-container)
          (grasp :top)
-         (source ?object-desig-source))
-)</code></pre>
+         (source ?object-desig-source)))</code></pre>
     <p>In summary, the code snippet directs the robot to carry out a mixing action in a circular pattern.</p>
     <h2>Calculation of Trajectories in Cartesian Space</h2>
     <ul>
+      Coordinate systems that are used for calculation:
         <li>Container-based coordinate system</li>
         <li>Gripper-based coordinate system</li>
         <li>Robot base coordinate system</li>
@@ -56,7 +56,7 @@ layout: default
     <h3>Mix Poses</h3>
     <p>By default, the parameter ResolutionIndex (abbreviated as reso) is initialized to twelve sample points.</p>
     <p>Mathematically represented as: \( x(t) = \textbf{EllipseFactor} \times \textbf{Radius} \times \cos(t), y(t) = \textbf{Radius} \times \sin(t) \)</p>
-    <h3>Orbit Path</h3>
+    <h3>Orbit Path Calculation through CRAM</h3>
     <pre><code>
 [...]
 (loop while (<= x CycleCount)
