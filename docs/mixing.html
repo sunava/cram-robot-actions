@@ -54,6 +54,7 @@ layout: default
     <p>The Start-mix-poses serve as a sequence of poses that facilitate a smooth transition from the initial approach-pose to the actual mix-pose.</p>
     <p>Mathematically represented as: \( x(t) = a \cdot e^{k \cdot t} \cos(t), \quad y(t) = a \cdot e^{k \cdot t} \sin(t) \)</p>
     <h3>Mix Poses</h3>
+    <img src="img/Allmixig.jpeg" alt="All 3 mixing motions">
     <p>By default, the parameter ResolutionIndex (abbreviated as reso) is initialized to twelve sample points.</p>
     <p>Mathematically represented as: \( x(t) = \textbf{EllipseFactor} \times \textbf{Radius} \times \cos(t), y(t) = \textbf{Radius} \times \sin(t) \)</p>
     <h3>Orbit Path Calculation through CRAM</h3>
@@ -71,6 +72,8 @@ layout: default
              (sin (* x angle))))
 ))
 </code></pre>
+<img src="img/Reso-rate.png" alt="Reso rate">
+
     <h3>Orbital Motion</h3>
     <p>The orbital motion is a composition of two circular motions.</p>
     <h3>End Pose and Retract Pose</h3>
